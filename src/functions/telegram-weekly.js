@@ -2,7 +2,7 @@ import fs from 'fs';
 import { getQualifiedEntries } from './qualified.js';
 import { getBlockRange } from './blocks.js';
 import { CHAT_ID, MSG_THREAD_ID_2 } from '../utils/env-vars.js';
-import { getCurrentDate } from '../utils/dates.js';
+import { getTodaysDate } from '../utils/dates.js';
 import { numFor } from '../utils/format.js';
 
 const opts = {
@@ -53,7 +53,7 @@ export async function msgResults(bot, provider) {
 }
 
 async function saveAccountListToCSV(accountList, filePath) {
-  const currentDate = getCurrentDate();
+  const currentDate = getTodaysDate();
   const csvContent = `Date: ${currentDate}\n${accountList.replace(
     /\n/g,
     '\r\n'
@@ -78,63 +78,3 @@ function abbreviateAddress(address) {
   )}`;
   return abbreviation;
 }
-
-// import dotenv from 'dotenv';
-// dotenv.config({ path: '../.env' });
-// import { CHAT_ID, MSG_THREAD_ID_2 } from '../utils/env_vars.js';
-// import { getQualifiedEntries } from './qualified.js';
-// import { numFor } from '../utils/format.js';
-
-// const opts = {
-//   message_thread_id: MSG_THREAD_ID_2,
-//   parse_mode: 'Markdown',
-// };
-
-// export async function msgResults(bot, provider) {
-//   try {
-//     const qualified = await getQualifiedEntries(provider);
-//     const totalEntries = qualified.results.length;
-//     const totalAccounts = qualified.totalAccounts;
-//     let totalBNB = 0;
-
-//     const accountList = qualified.results.map((entry) => entry.from).join('\n');
-
-//     for (const entry of qualified.results) {
-//       totalBNB += entry.bnb;
-//     }
-
-//     const messageParts = splitMessage(`
-// *Entries:*
-// ${accountList}
-
-// *Total Entries:* ${totalEntries}
-// *Total distinct accounts:* ${totalAccounts}
-// *Total BNB (post tax):* ${numFor.format(totalBNB)}`);
-
-//     for (const part of messageParts) {
-//       bot.sendMessage(CHAT_ID, part, opts);
-//     }
-//   } catch (error) {
-//     console.error('Error Sending Telegram Message!', error);
-//   }
-// }
-
-// function splitMessage(message, maxLength = 4096) {
-//   const parts = [];
-//   let currentPart = '';
-
-//   for (const line of message.split('\n')) {
-//     if (currentPart.length + line.length <= maxLength) {
-//       currentPart += line + '\n';
-//     } else {
-//       parts.push(currentPart.trim());
-//       currentPart = line + '\n';
-//     }
-//   }
-
-//   if (currentPart.trim().length > 0) {
-//     parts.push(currentPart.trim());
-//   }
-
-//   return parts;
-// }

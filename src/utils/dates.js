@@ -1,4 +1,4 @@
-export function getCurrentDate() {
+export function getTodaysDate() {
   try {
     const date = new Date();
     const year = date.getFullYear();
